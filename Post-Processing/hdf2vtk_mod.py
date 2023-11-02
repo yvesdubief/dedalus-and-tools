@@ -126,22 +126,15 @@ if __name__ == "__main__":
                 for i, f in enumerate(fields):
                     # print(i,f)
                     #cellData[f] = np.asfortranarray(datafile[field_names[i]][nt])
-                    if f == 'up':
-                        u = np.copy(datafile[field_names[i-1]][nt])
-                        up = np.zeros_like(u)
-                        umean = np.mean(u,axis=(0,1))
-                        for k in range(u.shape[2]):
-                            up[:,:,k] = u[:,:,k] - umean[k]
-                        cellData['up'] = up
-                    elif f == 'uzp':
-                        uz = np.copy(datafile[field_names[i-1]][nt])
-                        uzp = np.zeros_like(uz)
-                        uzmean = np.mean(uz,axis=(0,1))
-                        for k in range(uz.shape[2]):
-                            uzp[:,:,k] = uz[:,:,k] - uzmean[k]
-                        cellData['uzp'] = uzp
-                    else:
-                        cellData[f] = datafile[field_names[i]][nt]
+                    cellData[f] = datafile[field_names[i]][nt]
+                    if f in ffields:
+                        print(f,f+'p')
+                        ainst = np.copy(datafile[field_names[i]][nt])
+                        ap = np.zeros_like(ainst)
+                        amean = np.mean(ainst,axis=(0,1))
+                        for k in range(ainst.shape[2]):
+                            ap[:,:,k] = ainst[:,:,k] - amean[k]
+                        cellData[f+'p'] = ap
                 gridToVTK(outfile, x, y, z, cellData = cellData)
 if fseries:
     dseries["files"] = ldsnap
